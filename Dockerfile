@@ -24,7 +24,7 @@
 DOCKER-VERSION 0.7
 
 # Base docker image
-FROM ubuntu:12.04
+FROM ubuntu:precise
 MAINTAINER Daniel Mizyrycki <daniel@docker.com>
 
 ENV APP_PATH /application/stashboard
@@ -33,8 +33,10 @@ ENV PYTHONPATH $APP_PATH
 RUN echo 'deb http://archive.ubuntu.com/ubuntu precise main universe' > \
   /etc/apt/sources.list
 RUN apt-get update -q
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y less vim wget bzip2 \
-  unzip python-pip ca-certificates
+RUN yes 'Yes, do as I say!' | apt-get remove -y --force-yes python2.7-minimal
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y less wget bzip2 \
+  unzip ca-certificates vim
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python-pip
 RUN pip install --install-option="--install-lib=/usr/lib/python2.7" requests \
   oauth2 pyyaml pexpect
 
